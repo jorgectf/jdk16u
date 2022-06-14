@@ -1,0 +1,21 @@
+name: Build JDK 16
+
+on:
+  workflow_dispatch:
+    inputs:
+      TAG:
+        description: 'TAG to build'     
+        default: 'latest'
+        required: true
+        type: string
+  schedule:
+    - cron: '0 0 1 * *'
+
+jobs:
+  build:
+    uses: jorgectf/jdk4ql/.github/workflows/code-scanning.yml@main
+    with:
+      VERSION: 16
+      REPOSITORY: 'openjdk/jdk16u'
+      TAG: ${{ github.event.inputs.TAG }}
+      CONFIGURE_OPTS: '--disable-javac-server --disable-warnings-as-errors --disable-generate-classlist --with-boot-jdk=$JAVA_HOME_MINUS --with-build-jdk=$JAVA_HOME_NOW --disable-cds-archive --disable-jvm-feature-cds'
